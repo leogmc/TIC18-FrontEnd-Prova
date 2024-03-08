@@ -1,0 +1,49 @@
+<form [formGroup]="editarForm" (ngSubmit)="editarSuino($event)" class="editarForm">
+<mat-form-field appearance="fill">
+    <mat-label>Brinco do pai</mat-label>
+    <input matInput formControlName="brincoPai" placeholder="Brinco do pai" >
+    <mat-error *ngIf="editarForm.get('brincoPai')?.hasError('required')">Campo obrigatório</mat-error>
+    <mat-error *ngIf="editarForm.get('brincoPai')?.hasError('pattern')">Por favor, insira um número válido</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Brinco da mãe</mat-label>
+    <input matInput formControlName="brincoMae" placeholder="Brinco da mãe">
+    <mat-error *ngIf="editarForm.get('brincoMae')?.hasError('required')">Campo obrigatório</mat-error>
+    <mat-error *ngIf="editarForm.get('brincoMae')?.hasError('pattern')">Por favor, insira um número válido</mat-error>
+  </mat-form-field>
+<br>
+  <mat-form-field appearance="fill">
+    <mat-label>Data de Nascimento</mat-label>
+    <input matInput [matDatepicker]="pickerNascimento" formControlName="dataNascimento">
+    <mat-datepicker-toggle matSuffix [for]="pickerNascimento"></mat-datepicker-toggle>
+    <mat-datepicker #pickerNascimento></mat-datepicker>
+    <mat-error *ngIf="editarForm.get('dataNascimento')?.hasError('required')">Campo obrigatório</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Data da saída</mat-label>
+    <input matInput [matDatepicker]="pickerSaida" formControlName="dataSaida">
+    <mat-datepicker-toggle matSuffix [for]="pickerSaida"></mat-datepicker-toggle>
+    <mat-datepicker #pickerSaida></mat-datepicker>
+  </mat-form-field>
+<br>
+  <mat-form-field appearance="fill">
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="status">
+      <mat-option value="Ativo">Ativo</mat-option>
+      <mat-option value="Vendido">Vendido</mat-option>
+      <mat-option value="Morto">Morto</mat-option>
+    </mat-select>
+    <mat-error *ngIf="editarForm.get('status')?.hasError('required')">Campo obrigatório</mat-error>
+  </mat-form-field>
+<br>
+  <mat-form-field appearance="fill">
+    <mat-label>Sexo</mat-label>
+    <mat-select formControlName="sexo">
+      <mat-option value="M">M</mat-option>
+      <mat-option value="F">F</mat-option>
+    </mat-select>
+    <mat-error *ngIf="editarForm.get('sexo')?.hasError('required')">Campo obrigatório</mat-error>
+  </mat-form-field><br>
+  <button mat-raised-button id="enviar" color="primary" type="submit">Enviar</button>
+</form>
+

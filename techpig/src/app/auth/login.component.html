@@ -1,0 +1,31 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="container">
+  <div class="flex-container">
+    <mat-card [formGroup]="formLogin">
+      <h2>Login</h2>
+      <br>
+      <mat-form-field class="flex-item" appearance="outline">
+        <button class="icon-button" mat-icon-button matSuffix>
+        <mat-icon matSuffix>email</mat-icon>
+        </button>
+        <input matInput placeholder="E-mail" class="email" formControlName="email">
+        <mat-error *ngIf="formLogin.get('email')?.hasError">E-mail deve conter um valor válido</mat-error>
+      </mat-form-field>
+      <mat-form-field class="flex-item" appearance="outline">
+        <input matInput placeholder="Senha" [type]="hide ? 'password' : 'text'" formControlName="senha">
+        <button class="icon-button" mat-icon-button matSuffix (click)="hide = !hide"
+          [attr.aria-label]="'Esconder Senha'" [attr.aria-pressed]="hide">
+          <mat-icon matSuffix>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="formLogin.get('senha')?.hasError">senha deve conter um valor válido</mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary"  [disabled]="!formLogin.valid" (click)="isLogin ? login() : register()"
+      [class.align-right]="!isLogin" [disabled]="!formLogin.valid">{{
+      isLogin ? 'Entrar' : 'Registrar e Entrar' }}</button><br>
+      <button mat-raised-button color="basic" class="full" (click)="redirectToRegister()" *ngIf="isLogin">Novo Cadastro</button>
+    </mat-card>
+  </div>
+</div>
+
+
+

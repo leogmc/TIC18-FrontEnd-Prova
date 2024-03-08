@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+#cadastro {
+  margin: auto;
+  display: block; 
+}
+.email {
+  width: 100%;
+  padding-right: 6px;
+}
+.senha {
+  width: 100%;
+  padding-left: 6px;
+}
+#enviar {
+  margin: auto;
+  display: block; 
+}
+
+#enviar:hover {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  text-decoration: none;
+}
+#nomeAnimal {
+  width: 60%;
+  padding-right: 6px;
+}
+#nomeTutor {
+  width: 65%;
+  padding-left: 6px;
+}

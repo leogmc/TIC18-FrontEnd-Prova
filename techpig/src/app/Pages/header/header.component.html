@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="header">
+        <div class="logo">Tech Pig</div>    
+        <div class="nav-links">
+            <a routerLink="/principal" *ngIf="estaAutenticado" routerLinkActive="active">Home</a>
+            <a routerLink="/cadastrarAnimal" *ngIf="estaAutenticado" routerLinkActive="active">Adicionar</a>
+            <a routerLink="/listarAnimal" *ngIf="estaAutenticado" routerLinkActive="active">Listar</a>
+            <a routerLink="/cadastrarPeso" *ngIf="estaAutenticado" routerLinkActive="active">Cadastrar Peso</a>
+            <a *ngIf="estaAutenticado" (click)="logout()" style="cursor: pointer;">Logout</a>
+        </div>
+    </div>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Residência. Todos os direitos reservados. <a href="#">Política de Privacidade</a> | <a href="#">Termos do serviço</a></p>
+    </div>
+  </div>
