@@ -1,0 +1,23 @@
+<p *ngIf="loadedSuinos.length < 1">Não existem suínos cadastrados!</p>
+<!-- pig-list.component.html -->
+<div *ngIf="loadedSuinos.length >= 1">
+  <h2>Listagem de Suínos</h2>
+  <!-- Filtros -->
+  <div>
+    <!-- <label for="filtroBrincoPai">Filtrar por Brinco do Pai:</label>
+    <input type="text" id="filtroBrincoPai" [(ngModel)]="filtroBrincoPai"> -->
+    <!-- Outros filtros similares -->
+  </div>
+
+  <!-- Lista de Suínos -->
+  <div *ngFor="let suino of loadedSuinos">
+    <!-- Exibir os campos do suíno -->
+    <p>Brinco: {{ suino.brinco }}, Brinco do Pai: {{ suino.brincoPai }}, Brinco da Mãe: {{ suino.brincoMae }}, 
+    Data de Nascimento: {{ suino.dataNascimento }}, Data de Saída: {{ suino.dataSaida }}, Sexo: {{ suino.sexo }},
+    Status: {{ suino.status }}, Idade: {{ formatarData(suino.dataNascimento) | calcularIdade }}</p>
+    
+    <!-- Adicionar opções para editar e deletar -->
+    <!-- <button (click)="editarSuino(suino)">Editar</button>
+    <button (click)="deletarSuino(suino)">Deletar</button> -->
+  </div>
+</div>
