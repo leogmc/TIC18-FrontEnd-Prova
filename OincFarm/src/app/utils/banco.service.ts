@@ -1,4 +1,4 @@
-// PetShop/src/app/banco.service.ts
+
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, exhaustMap, map, of, take, tap } from 'rxjs';
@@ -11,17 +11,16 @@ import { PesoSuino } from '../models/pesoSuino';
 
 export class BancoService {
 
-  apiURL = 'https://techpig-3d8dc-default-rtdb.firebaseio.com/';
+  apiURL = 'https://oincfarm-97b0a-default-rtdb.firebaseio.com/';
 
   constructor(private http: HttpClient) { }
 
-  adicionarSuino(suino: Suino) {
-    return this.http.post(this.apiURL, suino).subscribe(
-      (response) => {
-        console.log(response);
-      }
+  adicionarSuino(suino: Suino): Observable<any> {
+    return this.http.post(`${this.apiURL}/suinos.json`, suino).pipe(
+      catchError(this.handleError<any>('adicionarSuino'))
     );
   }
+  
 
   getSuinos() {
     return this.http.get<{ [key: string]: Suino }>(`${this.apiURL}/suinos.json`).pipe(
@@ -38,18 +37,15 @@ export class BancoService {
     );
   }
 
-
   apagarTodosSuinos() {
     return this.http.delete(`${this.apiURL}/suinos.json`);
   }
 
-  // getSuino(id: string) {
-  //   const result = this.http.get<Suino>(
-  //     `https://techpig-3d8dc-default-rtdb.firebaseio.com/suinos/${id}.json`
-  //   );
-  //   console.log(result);
-  //   return result;
-  // }
+  apagarSuino(id: string): Observable<any> {
+    const url = `${this.apiURL}/suinos/${id}.json`;
+    return this.http.delete(url);
+  }
+
 
   getSuino(id: string): Observable<Suino> {
     const url = `${this.apiURL}/suinos/${id}.json`;
@@ -64,23 +60,24 @@ export class BancoService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(error);
-      // Mantenha a aplicação em execução, mas emita um erro
+      console.error(`${operation} failed:`, error);
       return of(result as T);
     };
+  
   }
+
+
   verificarBrincoExistente(brinco: string): Observable<boolean> {
-    const url = `${this.apiURL}/suinos.json`;
-    return this.http.get<any>(url).pipe(
-      map((suinos: any) => {
-        if (suinos) {
-          const brincos = Object.values(suinos).map((suino: any) => suino.brinco);
-          return brincos.includes(brinco);
-        }
-        return false;
-      })
-    );
+    return this.http.get(`${this.apiURL}/suinos.json?orderBy="brinco"&equalTo="${brinco}"`
+    )
+      .pipe(
+        map(response => {
+          // Se a resposta não for nula e tiver propriedades, significa que o brinco existe
+          return response !== null && Object.keys(response).length > 0;
+        })
+      );
   }
+  
   editarSuino(id: string, suino: Suino) {
     const url = `${this.apiURL}/suinos/${id}.json`;
     return this.http.put(url,
@@ -88,13 +85,21 @@ export class BancoService {
       { observe: 'response' }
     );
   }
+  
   adicionarPesoSuino(idSuino: string, pesoSuino: PesoSuino) {
     return this.http.post(`${this.apiURL}/pesos/${idSuino}.json`, pesoSuino);
   }
 
-  getPesosSuino(idSuino: string) {
-    return this.http.get<{ [key: string]: PesoSuino }>(`${this.apiURL}/pesos/${idSuino}.json`);
-  }
+  // getPesosSuino(idSuino: string): Observable<PesoSuino[]> {
+  //   return this.http.get<{ [key: string]: PesoSuino }>(`${this.apiURL}/pesos/${idSuino}.json`)
+  //     .pipe(
+  //       map(responseData => {
+  //         return Object.values(responseData);
+  //       }),
+  //       catchError(this.handleError<any>('getPesosSuino'))
+  //     );
+  // }
+  
 
   apagarTodosPesosSuino(idSuino: string) {
     return this.http.delete(`${this.apiURL}/pesos/${idSuino}.json`);
@@ -110,5 +115,27 @@ export class BancoService {
 
   apagarPesoSuino(idSuino: string, idPeso: string) {
     return this.http.delete(`${this.apiURL}/pesos/${idSuino}/${idPeso}.json`);
+  }
+
+  //TESTING
+
+  getPesosSuino(idSuino : string): Observable<any[]> {
+    const url = `https://oincfarm-97b0a-default-rtdb.firebaseio.com/pesos/${idSuino}.json`;
+    return this.http.get<any[]>(url)
+    .pipe(
+      map(pesosSuino => {
+        // Mapear a lista de objetos pesoSuino para uma lista de objetos contendo dataPesagem e pesoKg
+        return Object.values(pesosSuino).map((pesoSuino: any) => ({
+          dataPesagem: pesoSuino.dataPesagem,
+          pesoKg: pesoSuino.pesoKg
+        }));
+      }),
+      catchError(this.handleError2)
+    );
+  }
+
+  handleError2(error: any): Observable<any> {
+    console.error('Erro ao obter pesos de suíno:', error);
+    throw error;
   }
 }

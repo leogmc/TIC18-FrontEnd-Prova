@@ -2,67 +2,101 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BancoService } from '../../utils/banco.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+
 
 //@angular/material
+import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButton } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
+import { onlyNumbersValidator } from '../../customValidators/onlyNumbersValidator';
+import { dateFormatValidator } from '../../customValidators/dateFormatValidator';
 
 @Component({
   selector: 'app-editar',
   standalone: true,
-  imports: [MatFormFieldModule, MatDatepickerModule, MatSelectModule, ReactiveFormsModule, CommonModule  ],
+  imports: [MatFormFieldModule, MatDatepickerModule, MatSelectModule, ReactiveFormsModule, CommonModule,HttpClientModule, MatInputModule, MatButton  ],
   templateUrl: './editar.component.html',
   styleUrl: './editar.component.css'
 })
 export class EditarComponent {
 
-  editarForm!: FormGroup;
-  //suino: Suino = { brinco: 0, brincoPai: 0, brincoMae: 0, dataNascimento: '', dataSaida: '', status: 'Ativo', sexo: 'M' };
-  suino: any;
+  suinoForm!: FormGroup;
+  id:string = '';
+  editadoSucesso:boolean = false;
+
   constructor(
     private fb: FormBuilder,
-    private servico: BancoService,
-    private route: ActivatedRoute) { }
-  ngOnInit(): void {
-    this.editarForm = this.fb.group({
-      brincoPai: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      brincoMae: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      dataNascimento: ['', Validators.required],
-      dataSaida: [''],
-      status: ['', Validators.required],
-      sexo: ['', Validators.required],
-    });
+    private bancoService: BancoService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private snackBar : MatSnackBar) {}
 
-    
-    this.route.fragment.subscribe(fragment => {
-      if (fragment && this.editarForm) { // Verifica se editarForm está definido
-        const suinoParam = JSON.parse(fragment);
-        if (suinoParam) {
-          this.suino = suinoParam;
-          this.preencherFormulario();
+      //Se o app não funcionar, implementar o OnInit na classe....
+    ngOnInit(){
+    this.suinoForm = this.fb.group({
+      brinco: [null, [
+        Validators.required,
+        onlyNumbersValidator()
+      ]],
+      brincoPai: [null, [
+        Validators.required,
+        onlyNumbersValidator()
+      ]],
+      brincoMae: [null, [
+        Validators.required,
+        onlyNumbersValidator()
+      ]],
+      dataNascimento: [null, [
+        Validators.required,
+        dateFormatValidator()
+       
+      ]],
+      dataSaida: [null, [
+        Validators.required,
+        dateFormatValidator()
+       
+      ]],
+      status: [null, Validators.required],
+      sexo: [null, Validators.required],
+    });
+    this.id = this.route.snapshot.paramMap.get('id')!;
+    this.getSuino(this.id);
+    }
+
+    getSuino(id: any){
+      console.log("id-->"    + id);
+      this.bancoService.getSuino(id).subscribe(responseData => {
+        console.log(responseData);
+        this.suinoForm.setValue(responseData);
+      })
+    }
+
+    salvarSuino(){
+      const brinco = this.suinoForm.get('brinco')?.value;
+
+      console.log("Salvar suíno: " + this.suinoForm.value);
+      this.bancoService.editarSuino(this.id, this.suinoForm.value).subscribe(responseData => {
+        if(responseData.status == 200){
+          this.editadoSucesso = true;
+          this.snackBar.open('Cadastro editado com sucesso!', 'Fechar', { duration: 6000 });
+          this.redirecionaPrincipal();
+        } else {
+          console.log('Formulário inválido, verifique os campos.');
         }
-      }
-    });
-  }
-
-  preencherFormulario() {
-    console.log(this.suino);
-    this.editarForm.patchValue(this.suino); // Preenche automaticamente os valores do formulário com os dados do suíno
-  }
-
-
-  editarSuino(event: Event) {
-    event.preventDefault();
-    if (this.editarForm.valid) {
-      this.servico.adicionarSuino(this.editarForm.value);
-      this.editarForm.reset();
+      });        
     }
-    else {
-      console.log("Formulário inválido. Por favor, preencha todos os campos obrigatórios.");
-    }
+  
+  redirecionaPrincipal(){
+    setTimeout(() => {
+      this.router.navigate(['listarSuinos']);
+    }, 2000);
   }
+ 
 
 }

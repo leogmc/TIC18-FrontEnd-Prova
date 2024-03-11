@@ -1,11 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, tap } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Usuario } from '../../models/usuario';
-import { HttpClientModule } from '@angular/common/http';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
 interface AuthResponseData {
   idToken: string;
@@ -15,94 +11,65 @@ interface AuthResponseData {
   localId: string;
   registered?: boolean;
 }
+
 @Injectable({
   providedIn: 'root'
 })
 export class AutenticaService {
+  private readonly apiKey = 'AIzaSyB5w1o6q6kFHmEjJ1mao5AdPHHaX-dHv_Q';
+  private readonly signUpUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${this.apiKey}`;
+  private readonly signInUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${this.apiKey}`;
 
-  private userSubject = new BehaviorSubject<any>(null);
+  private userSubject = new BehaviorSubject<Usuario | null>(null);
   private estaAutenticado = false;
-  user: any;
-  error: any;
 
-
-  constructor(private http: HttpClient, public auth: AngularFireAuth, private httpClientModule: HttpClientModule, public angularFireModule : AngularFireModule, public angularFireAuthModule : AngularFireAuthModule) {
-    const user = sessionStorage.getItem('user');
-    if (user) {
-
-      this.userSubject.next(JSON.parse(user));
+  constructor(private http: HttpClient) {
+    const userData = sessionStorage.getItem('userData');
+    if (userData) {
+      this.userSubject.next(JSON.parse(userData));
     }
   }
 
-  private setUserSubject(user: any) {
-    sessionStorage.setItem('user', JSON.stringify(user));
-    this.userSubject.next(user);
-  }
-
-  getUser() {
+  getUser(): Observable<Usuario | null> {
     return this.userSubject.asObservable();
   }
 
-  getRoles() {
-    return this.userSubject.getValue();
-  }
-
-  logout() {
+  logout(): void {
     this.userSubject.next(null);
-    sessionStorage.clear();
-    this.auth.signOut();
+    sessionStorage.removeItem('userData');
+    this.setAutenticado(false);
   }
-  signupUser(email: string, password: string): Observable<AuthResponseData> {
-    const apiKey = 'AIzaSyB5w1o6q6kFHmEjJ1mao5AdPHHaX-dHv_Q';
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`;
-    return this.http.post<AuthResponseData>(url,
-      {
-        email: email,
-        password: password,
-        returnSecureToken: true
-      }).pipe(
-        tap(resData => {
-          const expiracaoData = new Date(new Date().getTime() + +resData.expiresIn * 1000);
-          const user = new Usuario(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            expiracaoData
-          );
-          this.userSubject.next(user);
-          localStorage.setItem('userData', JSON.stringify(user));
-          this.setAutenticado(true);
-        }),
-      );
-  }
-  
-  loginUser(email: string, password: string) {
 
-    const apiKey = 'AIzaSyB5w1o6q6kFHmEjJ1mao5AdPHHaX-dHv_Q';
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`;
-    return this.http.post<AuthResponseData>(url,
-      {
-        email: email,
-        password: password,
-        returnSecureToken: true
-      }).pipe(
-        tap(resData => {
-          const expiracaoData = new Date(new Date().getTime() + +resData.expiresIn * 1000);
-          const user = new Usuario(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            expiracaoData
-          );
-          this.userSubject.next(user);
-          localStorage.setItem('userData', JSON.stringify(user));
-          this.setAutenticado(true);
-        }),
-      );
+  signUpUser(email: string, password: string): Observable<AuthResponseData> {
+    return this.authenticate(email, password, this.signUpUrl);
   }
- 
 
-  setAutenticado(isAuthenticated: boolean) {
+  loginUser(email: string, password: string): Observable<AuthResponseData> {
+    return this.authenticate(email, password, this.signInUrl);
+  }
+
+  private authenticate(email: string, password: string, url: string): Observable<AuthResponseData> {
+    return this.http.post<AuthResponseData>(url, {
+      email,
+      password,
+      returnSecureToken: true
+    }).pipe(
+      tap(resData => {
+        const expiracaoData = new Date(new Date().getTime() + +resData.expiresIn * 1000);
+        const user = new Usuario(
+          resData.email,
+          resData.localId,
+          resData.idToken,
+          expiracaoData
+        );
+        this.userSubject.next(user);
+        sessionStorage.setItem('userData', JSON.stringify(user));
+        this.setAutenticado(true);
+      })
+    );
+  }
+
+  private setAutenticado(isAuthenticated: boolean): void {
     this.estaAutenticado = isAuthenticated;
   }
 }

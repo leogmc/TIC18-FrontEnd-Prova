@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpParams } from '@angular/common/http';
-
-import { Observable, from } from 'rxjs';
+import { Observable} from 'rxjs';
 import { exhaustMap, take } from 'rxjs/operators';
 import { AutenticaService } from './autentica.service';
 @Injectable()

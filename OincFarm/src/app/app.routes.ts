@@ -6,15 +6,20 @@ import { LoginComponent } from './components/auth/login.component';
 import { CadastroPesoComponent } from './components/cadastro-peso/cadastro-peso.component';
 import { EditarComponent } from './components/editar/editar.component';
 import { EditarPesoComponent } from './components/editar-peso/editar-peso.component';
+import { ControlePesoComponent } from './components/controle-peso/controle-peso.component';
+import { MenuPesoComponent } from './components/menu-peso/menu-peso.component';
+import { AutenticacaoGuard } from './components/auth/auth.guard';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: 'home', component: HomeComponent},
-    { path: 'cadastrarSuino', component: PigFormComponent },
-    { path: 'listarSuinos', component: ListarSuinosComponent },
-    { path: 'cadastrarPeso', component: CadastroPesoComponent },
-    { path: 'editarPeso/:id',  component: EditarPesoComponent},
-    { path: 'editarAnimal', component: EditarComponent },
+    { path: 'home', component: HomeComponent, canActivate : [AutenticacaoGuard]},
+    { path: 'cadastrarSuino', component: PigFormComponent, canActivate : [AutenticacaoGuard] },
+    { path: 'listarSuinos', component: ListarSuinosComponent, canActivate : [AutenticacaoGuard] },
+    { path: 'editarSuino/:id', component: EditarComponent, canActivate : [AutenticacaoGuard] },
+    { path: 'cadastrarPeso', component: CadastroPesoComponent, canActivate : [AutenticacaoGuard] },
+    { path: 'editarPeso/:id',  component: EditarPesoComponent, canActivate : [AutenticacaoGuard]},
+    { path: 'controlePeso', component: ControlePesoComponent, canActivate : [AutenticacaoGuard] },
+    { path: 'menuPeso', component : MenuPesoComponent},
     { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
 

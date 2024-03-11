@@ -1,28 +1,40 @@
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<div class="container">
-  <div class="flex-container">
-    <mat-card [formGroup]="formLogin">
-      <h2>Login</h2>
+<div class="content">
+  <form class="formulario" [formGroup]="formLogin">
+    <h2 class="titulo">Login</h2>
       <br>
-      <mat-form-field class="flex-item" appearance="outline">
-        <button class="icon-button" mat-icon-button matSuffix>
-        <mat-icon matSuffix>email</mat-icon>
-        </button>
-        <input matInput placeholder="E-mail" class="email" formControlName="email">
-        <mat-error *ngIf="formLogin.get('email')?.hasError">E-mail deve conter um valor válido</mat-error>
+      <mat-form-field appearance="outline" class="form">
+          <mat-label>Email</mat-label>
+        <input matInput class="email" formControlName="email">
       </mat-form-field>
-      <mat-form-field class="flex-item" appearance="outline">
+      <div>
+        <span class="span" *ngIf="!formLogin.get('email')?.valid && formLogin.get('email')?.touched">
+        * Campo obrigatório <br>
+        * Insira um email válido<br>      
+        </span>
+      </div>
+      <br>
+
+      <mat-form-field appearance="outline" class="form">
         <input matInput placeholder="Senha" [type]="hide ? 'password' : 'text'" formControlName="senha">
-        <button class="icon-button" mat-icon-button matSuffix (click)="hide = !hide"
-          [attr.aria-label]="'Esconder Senha'" [attr.aria-pressed]="hide">
-          <mat-icon matSuffix>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-label>Senha</mat-label>
+        <button mat-icon-button matSuffix class="senha" (click)="hide = !hide" [attr.aria-label]="hide ? 'Mostrar Senha' : 'Esconder Senha'"
+        [attr.aria-pressed]="hide">
+        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-        <mat-error *ngIf="formLogin.get('senha')?.hasError">senha deve conter um valor válido</mat-error>
-      </mat-form-field>
-      <button mat-raised-button color="primary"  [disabled]="!formLogin.valid" (click)="isLogin ? login() : register()"
+        </mat-form-field>
+        <div>
+          <span class="span" *ngIf="!formLogin.get('senha')?.valid && formLogin.get('senha')?.touched">
+          * Campo obrigatório <br>
+          * A senha deve conter pelo menos 6 dígitos<br>      
+          </span>
+        </div>
+        <br>
+
+      <div>
+      <button mat-raised-button color="primary" class="botao"  [disabled]="!formLogin.valid" (click)="isLogin ? login() : register()"
       [class.align-right]="!isLogin" [disabled]="!formLogin.valid">{{
-      isLogin ? 'Entrar' : 'Registrar e Entrar' }}</button><br>
-      <button mat-raised-button color="basic" class="full" (click)="redirectToRegister()" *ngIf="isLogin">Novo Cadastro</button>
-    </mat-card>
-  </div>
+      isLogin ? 'Entrar' : 'Registrar e Entrar' }}</button>
+      <button mat-raised-button color="primary" class="botao" id="cadastrar" (click)="redirectToRegister()" *ngIf="isLogin">Cadastrar-se</button>
+      </div>
+</form>
 </div>

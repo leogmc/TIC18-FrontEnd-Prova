@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +11,7 @@ import { dateFormatValidator } from '../../customValidators/dateFormatValidator'
 import { AudioService } from '../../utils/audio.service';
 import { DataBaseService } from '../../utils/data-base.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -23,7 +25,7 @@ export class PigFormComponent {
 
   exemploForm : FormGroup;
 
-  constructor(private fb: FormBuilder, private audioService : AudioService, private dataBaseService: DataBaseService) {
+  constructor(private fb: FormBuilder, private audioService : AudioService, private dataBaseService: DataBaseService, private snackBar : MatSnackBar, private router : Router) {
     // Criar o formulário utilizando FormBuilder
     this.exemploForm = this.fb.group({
       brinco: [null, [
@@ -93,13 +95,25 @@ export class PigFormComponent {
           };
           // Chama o método addSuino() para enviar os dados do usuário
           this.dataBaseService.addSuino(dadosSuino);
+          this.snackBar.open('Suíno cadastrado com sucesso!', 'Fechar', { duration: 2000 });
+          this.redirecionaPrincipal();
           console.log('Dados do suíno:', dadosSuino);
         } else {
           console.log('Formulário inválido, verifique os campos.');
+          this.snackBar.open('Erro ao cadastrar o suíno.', 'Fechar', { duration: 2000 });
         }
       }
     }
     );
   }
+
+
+
+  redirecionaPrincipal(){
+    setTimeout(() => {
+      this.router.navigate(['home']);
+    }, 2000);
+  }
+
 }
   
