@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="FichaTecnica">
+    <div>
+      <h2>Ficha Técnica do Suíno</h2>
+      <hr />
+    </div>
+    <p><strong>Brinco do Animal:</strong> {{suino?.Brinco}}</p>
+    <p><strong>Brinco do Pai:</strong> {{ suino?.BrincoPai}}</p>
+    <p><strong>Brinco da Mãe:</strong> {{ suino?.BrincoMae}}</p>
+    <p><strong>Idade</strong> {{ suino?.Idade}}</p> 
+    <p><strong>Raça:</strong> {{ suino?.Raca}}</p> 
+    <!-- Outras informações do suíno -->
+  </div>
+  <div class="Relatorio">
+    <h3>Relatorio de Peso</h3>
+    <hr />
+    graficos
+  </div>
+  <div class="Historico">
+    <div>
+      <h3>Historico de Peso</h3>
+      <hr />
+      <br>
+      <button >Adicionar Peso</button>
+    </div>
+    <div class="table">
+      <table class="table">
+        <thead>
+          <th>Brinco do Animal</th>
+          <th>Peso</th>
+          <th>Data</th>
+          <th>Ações</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let peso of pesos">
+            <td>{{ peso.Brinco }}</td>
+            <td>{{ peso.Peso }} kg</td>
+            <td>{{ peso.Data| date }}</td>
+            <td>
+              <div class="buttons">
+                <a class="button">Edit </a>
+                <a class="button">Delete</a>
+              
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

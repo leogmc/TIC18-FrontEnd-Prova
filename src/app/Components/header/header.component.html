@@ -1,0 +1,38 @@
+<nav>
+  <div class="logo">
+    <a (click)="navigateTo('/home')">
+      <img src="assets/porco.png" alt="" />
+      <img src="assets/texto.png" alt="" />
+    </a>
+  </div>
+
+  <div class="menu-icon" (click)="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <div class="links" [class.expanded]="isMenuExpanded">
+    <ul>
+ 
+
+      <li>
+        <a
+          (click)="navigateTo('suinos')"
+          *ngIf="estaAutenticado "
+          [class.clicked]="currentRoute === 'suinos'"
+          >Suinos</a
+        >
+      </li>
+
+
+      <li>
+        <a
+          *ngIf="estaAutenticado"
+          (click)="navigateTo('login')"
+          style="cursor: pointer"
+          ><img src="../../../assets/icone/sair.png" style="display: block; width: 30px;" alt="sair"></a
+        >
+      </li>
+    </ul>
+  </div>
+</nav>

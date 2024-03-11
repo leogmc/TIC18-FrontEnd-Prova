@@ -1,0 +1,58 @@
+<div class="container">
+<app-relatorio-suino style="width: 90%;" ></app-relatorio-suino>
+  <div class="options">
+    <div>
+      <input
+        type="text"
+        placeholder="Pesquisar"
+     
+      />
+    </div>
+    <div>
+      <select [(ngModel)]="selectedField">
+        <option >
+          
+        </option>
+      </select>
+    </div>
+    <div>
+      <button (click)="suinoFormeRef.openModal()">Adicionar Animal</button>
+    </div>
+  </div>
+  <table class="table">
+    <thead>
+      <th>Brinco do Animal</th>
+      <th>Brinco do Pai</th>
+      <th>Brinco da Mãe</th>
+      <th>Data de Nascimento</th>
+      <th>Raça</th>
+      <th>Sexo</th>
+      <th>Idade</th>
+      <th>Data de Saida</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let suino of suinos">
+        <td>{{ suino.Brinco }}</td>
+        <td>{{ suino.BrincoPai }}</td>
+        <td>{{ suino.BrincoMae }}</td>
+        <td>{{ suino.DataNascimento | date }}</td>
+        <td>{{ suino.Raca }}</td>
+        <td>{{ suino.Sexo }}</td>
+        <td>{{ suino.Idade }}</td>
+        <td>{{ suino.DataSaida | date }}</td>
+        <td>{{ suino.Status }}</td>
+        <td>
+          <div class="buttons">
+            <a class="button" (click)="suinoFormeEditRef.EditSuino(suino)">Edit </a>
+            <a class="button" (click)="deleteSuino(suino)">Delete</a>
+            <a class="button" (click)="navigateTo('suino/details/', number(suino.id))">Details</a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<app-suino-forme #suinoFormeRef></app-suino-forme>
+<app-suino-forme-edit #suinoFormeEditRef></app-suino-forme-edit>

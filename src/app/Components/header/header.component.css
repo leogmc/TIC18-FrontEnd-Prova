@@ -1,0 +1,103 @@
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+.logo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+nav div img:nth-child(1){
+    width: 100px;
+    margin-bottom: 4px;
+    -webkit-user-drag: none;
+}
+nav div img:nth-child(2){
+    width: 130px;
+    margin-bottom: 8px;
+    -webkit-user-drag: none;
+   
+}
+
+a{
+    /* -webkit-user-drag: none; */
+    cursor: pointer;
+}
+.links ul{
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    align-items: center;
+    gap: 10px;
+}
+.links ul li a{
+    text-decoration: none;
+    color: #fda7ad;
+    font-weight: bold;
+}
+
+.clicked{
+  
+    color: #fb4738 !important;
+   
+}
+
+.menu-icon {
+    cursor: pointer;
+    display: none;
+  }
+  
+  .menu-icon span {
+    display: block;
+    height: 3px;
+    width: 25px;
+    background-color: #fda7ad;
+    margin: 5px 0;
+  }
+  
+  .links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .links.expanded {
+    display: flex;
+  }
+  
+  /* Adaptação para tela mobile */
+  @media screen and (max-width: 767px) {
+    .menu-icon {
+      display: block;
+    }
+  
+    .links {
+      display: none;
+      position: absolute;
+      top: 60px; /* Ajuste conforme necessário para evitar sobreposição ao logo e ajuste ao tamanho da barra de navegação */
+      right: 0;
+      flex-direction: column;
+      background-color: white; /* Ajuste conforme necessário para o estilo desejado */
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px; /* Sombra opcional */
+    }
+  
+    .links.expanded {
+      display: flex;
+      margin-right: 2px;
+      justify-items: center;
+    }
+    .links ul{
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        padding: 10px;
+        justify-items: center;
+    }
+}
+  

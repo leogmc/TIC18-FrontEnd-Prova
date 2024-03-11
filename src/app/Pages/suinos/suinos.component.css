@@ -1,0 +1,115 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  gap: 10px;
+  margin-top: 2%;
+}
+.options {
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  width: 90%;
+  align-items: center;
+}
+.options div button {
+  background-color: #13aa52;
+  border: 1px solid #13aa52;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  outline: none;
+  outline: 0;
+  padding: 5px 25px;
+  text-align: center;
+  transform: translateY(0);
+  transition: transform 150ms, box-shadow 150ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.options div button:hover {
+  box-shadow: rgba(0, 0, 0, 0.15) 0 3px 9px 0;
+  background-color: #13aa52c4;
+
+}
+.options div input {
+  padding: 5px;
+}
+.options div select {
+  padding: 5px;
+}
+.table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.table thead th {
+  background-color: #ff6a23;
+  color: white;
+  padding: 5px 0px;
+  font-size: 1rem;
+  font-weight: 800;
+
+  border: white 1px solid;
+}
+
+.table thead th:nth-child(5) {
+  width: 10%;
+}
+
+.table tbody tr {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  color: black;
+  font-size: 16px;
+  background-color: white;
+  border-bottom: rgb(7, 3, 3) 1px solid;
+  text-align: center;
+}
+
+.table tbody td {
+  padding: 5px 0px;
+}
+.buttons {
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.button {
+  background-color: rgba(0, 128, 0, 0.719);
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.button:nth-child(2) {
+  background-color: red;
+}
+.button:nth-child(3) {
+  background-color: rgb(255, 255, 0);
+  color: black;
+}
+.button:nth-child(1):hover {
+  background-color: green;
+}
+.button:nth-child(2):hover {
+  background-color: rgb(182, 0, 0);
+}

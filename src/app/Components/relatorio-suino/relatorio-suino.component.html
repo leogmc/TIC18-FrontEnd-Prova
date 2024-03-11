@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="card">
+    <img  src="assets/porco.png" alt="" style="width: 70px;">
+    <h3>Suinos</h3>
+    <span>{{ suinos.length }}</span>
+  </div>
+  <div class="card">
+    <img src="assets/icone/ativo.png" alt="">
+    <h3>Ativos</h3>
+    <span>{{getRelatorioAtivos()}}</span>
+  </div>
+  <div class="card">
+    <img src="assets/icone/abatido.png" alt="">
+    <h3>Mortos</h3>
+    <span>{{getRelatorioMortos()}}</span>
+  </div>
+  <div class="card">
+    <img  src="assets/icone/vendido.png" alt="">
+    <h3>Vendidos</h3>
+    <span *ngIf="suinos && suinos.length">{{getRelatorioVendas()}}</span>    
+  </div>
+
+
+</div>
