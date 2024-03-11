@@ -5,10 +5,10 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/auth/login.component';
 import { CadastroPesoComponent } from './components/cadastro-peso/cadastro-peso.component';
 import { EditarComponent } from './components/editar/editar.component';
-import { EditarPesoComponent } from './components/editar-peso/editar-peso.component';
 import { ControlePesoComponent } from './components/controle-peso/controle-peso.component';
 import { MenuPesoComponent } from './components/menu-peso/menu-peso.component';
 import { AutenticacaoGuard } from './components/auth/auth.guard';
+import { ListarPesosComponent } from './components/listar-pesos/listar-pesos.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -16,8 +16,7 @@ export const routes: Routes = [
     { path: 'cadastrarSuino', component: PigFormComponent, canActivate : [AutenticacaoGuard] },
     { path: 'listarSuinos', component: ListarSuinosComponent, canActivate : [AutenticacaoGuard] },
     { path: 'editarSuino/:id', component: EditarComponent, canActivate : [AutenticacaoGuard] },
-    { path: 'cadastrarPeso', component: CadastroPesoComponent, canActivate : [AutenticacaoGuard] },
-    { path: 'editarPeso/:id',  component: EditarPesoComponent, canActivate : [AutenticacaoGuard]},
+    { path: 'listarPeso', component: ListarPesosComponent, canActivate : [AutenticacaoGuard] },
     { path: 'controlePeso', component: ControlePesoComponent, canActivate : [AutenticacaoGuard] },
     { path: 'menuPeso', component : MenuPesoComponent},
     { path: '', redirectTo: '/login', pathMatch: 'full' },
