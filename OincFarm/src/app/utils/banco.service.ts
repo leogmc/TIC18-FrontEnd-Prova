@@ -20,7 +20,7 @@ export class BancoService {
       catchError(this.handleError<any>('adicionarSuino'))
     );
   }
-  
+
 
   getSuinos() {
     return this.http.get<{ [key: string]: Suino }>(`${this.apiURL}/suinos.json`).pipe(
@@ -63,7 +63,7 @@ export class BancoService {
       console.error(`${operation} failed:`, error);
       return of(result as T);
     };
-  
+
   }
 
 
@@ -77,7 +77,7 @@ export class BancoService {
         })
       );
   }
-  
+
   editarSuino(id: string, suino: Suino) {
     const url = `${this.apiURL}/suinos/${id}.json`;
     return this.http.put(url,
@@ -85,7 +85,7 @@ export class BancoService {
       { observe: 'response' }
     );
   }
-  
+
   adicionarPesoSuino(idSuino: string, pesoSuino: PesoSuino) {
     return this.http.post(`${this.apiURL}/pesos/${idSuino}.json`, pesoSuino);
   }
@@ -99,7 +99,7 @@ export class BancoService {
   //       catchError(this.handleError<any>('getPesosSuino'))
   //     );
   // }
-  
+
 
   apagarTodosPesosSuino(idSuino: string) {
     return this.http.delete(`${this.apiURL}/pesos/${idSuino}.json`);
@@ -116,22 +116,64 @@ export class BancoService {
   apagarPesoSuino(idSuino: string, idPeso: string) {
     return this.http.delete(`${this.apiURL}/pesos/${idSuino}/${idPeso}.json`);
   }
+  atualizarListaPesos(): Observable<PesoSuino[]> {
+    // Construindo a  URL para buscar todos os pesos de todos os suínos
+    const url = `${this.apiURL}/pesos.json`;
 
+    // Fazendo a requisição HTTP para buscar todos os pesos
+    return this.http.get<{ [key: string]: { [key: string]: PesoSuino } }>(url).pipe(
+      map(responseData => {
+        // Convertendo a resposta para um array de pesos
+        const listaPesos: PesoSuino[] = [];
+        for (const keySuino in responseData) {
+          if (responseData.hasOwnProperty(keySuino)) {
+            for (const keyPeso in responseData[keySuino]) {
+              if (responseData[keySuino].hasOwnProperty(keyPeso)) {
+                listaPesos.push({ ...(responseData[keySuino][keyPeso] as PesoSuino), id: keyPeso });
+              }
+            }
+          }
+        }
+        // Retornando a lista de pesos atualizada
+        return listaPesos;
+      })
+    );
+  }
+
+
+  obterTodosPesos(): Observable<PesoSuino[]> {
+    const url = `${this.apiURL}/pesos.json`;
+    return this.http.get<{ [key: string]: { [key: string]: PesoSuino } }>(url).pipe(
+      map(responseData => {
+        const listaPesos: PesoSuino[] = [];
+        for (const key in responseData) {
+          if (responseData.hasOwnProperty(key)) {
+            for (const keyPeso in responseData[key]) {
+              if (responseData[key].hasOwnProperty(keyPeso)) {
+                listaPesos.push({ ...(responseData[key][keyPeso] as PesoSuino), id: keyPeso });
+              }
+            }
+          }
+        }
+        return listaPesos;
+      })
+    );
+  }
   //TESTING
 
-  getPesosSuino(idSuino : string): Observable<any[]> {
+  getPesosSuino(idSuino: string): Observable<any[]> {
     const url = `https://oincfarm-97b0a-default-rtdb.firebaseio.com/pesos/${idSuino}.json`;
     return this.http.get<any[]>(url)
-    .pipe(
-      map(pesosSuino => {
-        // Mapear a lista de objetos pesoSuino para uma lista de objetos contendo dataPesagem e pesoKg
-        return Object.values(pesosSuino).map((pesoSuino: any) => ({
-          dataPesagem: pesoSuino.dataPesagem,
-          pesoKg: pesoSuino.pesoKg
-        }));
-      }),
-      catchError(this.handleError2)
-    );
+      .pipe(
+        map(pesosSuino => {
+          // Mapear a lista de objetos pesoSuino para uma lista de objetos contendo dataPesagem e pesoKg
+          return Object.values(pesosSuino).map((pesoSuino: any) => ({
+            dataPesagem: pesoSuino.dataPesagem,
+            pesoKg: pesoSuino.pesoKg
+          }));
+        }),
+        catchError(this.handleError2)
+      );
   }
 
   handleError2(error: any): Observable<any> {

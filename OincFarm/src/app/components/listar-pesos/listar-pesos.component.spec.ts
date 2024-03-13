@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditarPesoComponent } from './editar-peso.component';
+import { ListarPesosComponent } from './listar-pesos.component';
 
-describe('EditarPesoComponent', () => {
-  let component: EditarPesoComponent;
-  let fixture: ComponentFixture<EditarPesoComponent>;
+describe('ListarPesosComponent', () => {
+  let component: ListarPesosComponent;
+  let fixture: ComponentFixture<ListarPesosComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditarPesoComponent]
+      imports: [ListarPesosComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(EditarPesoComponent);
+    fixture = TestBed.createComponent(ListarPesosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
