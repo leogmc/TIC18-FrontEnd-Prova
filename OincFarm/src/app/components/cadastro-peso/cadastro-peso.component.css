@@ -1,7 +1,6 @@
 .formulario {
     border: solid 4px #652c2c;
     box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.4); /* Sombra */
-    background-color:#ffffff;
     border-radius: 5px;
     padding: 20px;
     min-width: 150px;
@@ -36,8 +35,21 @@
   background-color: rgb(255, 255, 255);
   color: solid #8C4A4A;
   border-radius: 10px;
-  width: 128px;
+  width: 100px;
   height: 40px;
+  margin: 5px;
+}
+
+#btnEditar{
+  color:#8C4A4A;
+  background-color: #F2C4C8;
+  border: 1px solid #8C4A4A; 
+}
+
+#btnAdicionar{
+  color:#F2C4C8;;
+  background-color: #8C4A4A;
+  border: 1px solid #8C4A4A; 
 }
 
 mat-label{
