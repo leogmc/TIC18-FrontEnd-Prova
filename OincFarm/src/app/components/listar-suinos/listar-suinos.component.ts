@@ -10,6 +10,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BancoService } from '../../utils/banco.service';
 import { RouterModule } from '@angular/router';
+import { MatFormField } from '@angular/material/form-field';
+import { MatLabel } from '@angular/material/form-field';
+import { MatFormFieldModule} from '@angular/material/form-field';
 
 
 @Component({
@@ -17,16 +20,72 @@ import { RouterModule } from '@angular/router';
     standalone: true,
     templateUrl: './listar-suinos.component.html',
     styleUrl: './listar-suinos.component.css',
-    imports: [CommonModule, FormsModule, CalcularIdadePipe, MatTableModule, MatIcon, RouterModule]
+    imports: [CommonModule, FormsModule, CalcularIdadePipe, MatTableModule, MatIcon, RouterModule, MatFormField, MatLabel, MatFormFieldModule]
 })
 export class ListarSuinosComponent implements OnInit {
 
 
 
-  //Lista dos suínos
+  // Lista dos suínos
   loadedSuinos: Suino[] = [];
+  filteredSuinos: Suino[] = []; // Array de suínos filtrados
+  filtroBrinco: number | null = null; // Filtro para o atributo 'brinco'
+  filtroBrincoPai: number | null = null; // Filtro para o atributo 'brincoPai'
+  filtroBrincoMae: number | null = null; // Filtro para o atributo 'brincoMae'
+  filtroDataNascimento: string = ''; // Filtro para o atributo 'dataNascimento'
+  filtroDataSaida: string = ''; // Filtro para o atributo 'dataSaida'
+  filtroStatus: 'Ativo' | 'Vendido' | 'Morto' | null = null; // Filtro para o atributo 'status'
+  filtroSexo: 'M' | 'F' | null = null; // Filtro para o atributo 'sexo'
 
-  
+  // Método para filtrar os suínos com base nos filtros definidos
+  filtrarSuinos(): void {
+    console.log("Método chamado.");
+
+    // Verificar se algum filtro está sendo aplicado
+    const isFilterApplied =
+      this.filtroBrinco !== null ||
+      this.filtroBrincoPai !== null ||
+      this.filtroBrincoMae !== null ||
+      this.filtroDataNascimento !== '' ||
+      this.filtroDataSaida !== '' ||
+      this.filtroStatus !== null ||
+      this.filtroSexo !== null;
+
+    // Se nenhum filtro estiver sendo aplicado, exibir todos os suínos
+    if (!isFilterApplied) {
+      this.filteredSuinos = [...this.loadedSuinos]; // Cópia dos suínos carregados
+      return;
+    }
+
+    // Se houver filtro aplicado, filtrar os suínos de acordo com os filtros definidos
+    this.filteredSuinos = this.loadedSuinos.filter((suino) => {
+      return (
+        (!this.filtroBrinco || suino.brinco === this.filtroBrinco) &&
+        (!this.filtroBrincoPai || suino.brincoPai === this.filtroBrincoPai) &&
+        (!this.filtroBrincoMae || suino.brincoMae === this.filtroBrincoMae) &&
+        (!this.filtroDataNascimento || suino.dataNascimento.includes(this.filtroDataNascimento)) &&
+        (!this.filtroDataSaida || suino.dataSaida.includes(this.filtroDataSaida)) &&
+        (!this.filtroStatus || suino.status === this.filtroStatus) &&
+        (!this.filtroSexo || suino.sexo === this.filtroSexo)
+      );
+    });
+
+    console.log(this.filteredSuinos);
+}
+
+
+  limparFiltros(): void {
+    this.filtroBrinco = null;
+    this.filtroBrincoPai = null;
+    this.filtroBrincoMae = null;
+    this.filtroDataNascimento = '';
+    this.filtroDataSaida = '';
+    this.filtroStatus = null;
+    this.filtroSexo = null;
+    this.filtrarSuinos();
+  }
+
+
 
   displayedColumns: string[] = ['brinco', 'brincoPai', 'brincoMae', 'dataNascimento', 'dataSaida', 'sexo', 'status', 'idade', 'actions'];
 
@@ -48,8 +107,6 @@ export class ListarSuinosComponent implements OnInit {
   
  
 
-  //Filtros
-  filtroBrincoPai: string = '';
   
   constructor(private datePipe: DatePipe, private bancoService: BancoService, private snackBar: MatSnackBar, private location : Location) { }
 
@@ -61,6 +118,7 @@ export class ListarSuinosComponent implements OnInit {
     this.bancoService.getSuinos().subscribe((responseData : Suino[]) => {
       console.log(responseData);
       this.loadedSuinos = responseData;
+      this.filteredSuinos = [...this.loadedSuinos]; // Atualizar filteredSuinos com os suínos carregados
       console.log(this.loadedSuinos);     
     });
   }
