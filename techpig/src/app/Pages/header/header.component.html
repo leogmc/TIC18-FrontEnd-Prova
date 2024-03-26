@@ -6,6 +6,7 @@
             <a routerLink="/cadastrarAnimal" *ngIf="estaAutenticado" routerLinkActive="active">Adicionar</a>
             <a routerLink="/listarAnimal" *ngIf="estaAutenticado" routerLinkActive="active">Listar</a>
             <a routerLink="/cadastrarPeso" *ngIf="estaAutenticado" routerLinkActive="active">Cadastrar Peso</a>
+            <a routerLink="/cadastroSessao" *ngIf="estaAutenticado" routerLinkActive="active">Cadastrar Sessão</a>
             <a *ngIf="estaAutenticado" (click)="logout()" style="cursor: pointer;">Logout</a>
         </div>
     </div>

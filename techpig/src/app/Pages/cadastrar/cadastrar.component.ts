@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { BancoService } from '../../banco.service';
+import { BancoService } from '../../utils/banco.service';
 import { Observable, catchError, map, of } from 'rxjs';
 
 @Component({

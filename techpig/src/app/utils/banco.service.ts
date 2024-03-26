@@ -1,9 +1,9 @@
 // PetShop/src/app/banco.service.ts
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, exhaustMap, map, of, take, tap } from 'rxjs';
-import { Suino } from './Models/suino';
-import { PesoSuino } from './Models/pesoSuino';
+import { Observable, Subject, catchError, exhaustMap, map, of, take, tap } from 'rxjs';
+import { Suino } from '../Models/suino';
+import { PesoSuino } from '../Models/pesoSuino';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,11 @@ import { PesoSuino } from './Models/pesoSuino';
 export class BancoService {
 
   apiURL = 'https://techpig-3d8dc-default-rtdb.firebaseio.com/';
-
+  private pigListUpdated = new Subject<void>();
   constructor(private http: HttpClient) { }
 
   adicionarSuino(suino: Suino) {
-    return this.http.post(this.apiURL, suino).subscribe(
+    return this.http.post(`${this.apiURL}/suinos.json`, suino).subscribe(
       (response) => {
         console.log(response);
       }
@@ -43,6 +43,9 @@ export class BancoService {
     return this.http.delete(`${this.apiURL}/suinos.json`);
   }
 
+  getSuinosUpdated(): Observable<void> {
+    return this.pigListUpdated.asObservable();
+  }
   // getSuino(id: string) {
   //   const result = this.http.get<Suino>(
   //     `https://techpig-3d8dc-default-rtdb.firebaseio.com/suinos/${id}.json`
@@ -103,6 +106,34 @@ export class BancoService {
   getPesoSuino(idSuino: string, idPeso: string) {
     return this.http.get<PesoSuino>(`${this.apiURL}/pesos/${idSuino}/${idPeso}.json`);
   }
+  
+  apagarSuino(id: string): Observable<any> {
+    const url = `${this.apiURL}/suinos/${id}.json`;
+    return this.http.delete(url);
+  }
+  atualizarListaPesos(): Observable<PesoSuino[]> {
+    // Construindo a URL para buscar todos os pesos de todos os suínos
+    const url = `${this.apiURL}/pesos.json`;
+
+    // Fazendo a requisição HTTP para buscar todos os pesos
+    return this.http.get<{ [key: string]: { [key: string]: PesoSuino } }>(url).pipe(
+      map(responseData => {
+        // Convertendo a resposta para um array de pesos
+        const listaPesos: PesoSuino[] = [];
+        for (const keySuino in responseData) {
+          if (responseData.hasOwnProperty(keySuino)) {
+            for (const keyPeso in responseData[keySuino]) {
+              if (responseData[keySuino].hasOwnProperty(keyPeso)) {
+                listaPesos.push({ ...(responseData[keySuino][keyPeso] as PesoSuino), id: keyPeso });
+              }
+            }
+          }
+        }
+        // Retornando a lista de pesos atualizada
+        return listaPesos;
+      })
+    );
+  }
 
   editarPesoSuino(idSuino: string, idPeso: string, pesoSuino: PesoSuino) {
     return this.http.put(`${this.apiURL}/pesos/${idSuino}/${idPeso}.json`, pesoSuino);
@@ -111,4 +142,32 @@ export class BancoService {
   apagarPesoSuino(idSuino: string, idPeso: string) {
     return this.http.delete(`${this.apiURL}/pesos/${idSuino}/${idPeso}.json`);
   }
+
+
+  obterTodosPesos(): Observable<PesoSuino[]> {
+    const url = `${this.apiURL}/pesos.json`;
+    return this.http.get<{ [key: string]: { [key: string]: PesoSuino } }>(url).pipe(
+      map(responseData => {
+        const listaPesos: PesoSuino[] = [];
+        for (const key in responseData) {
+          if (responseData.hasOwnProperty(key)) {
+            for (const keyPeso in responseData[key]) {
+              if (responseData[key].hasOwnProperty(keyPeso)) {
+                listaPesos.push({ ...(responseData[key][keyPeso] as PesoSuino), id: keyPeso });
+              }
+            }
+          }
+        }
+        return listaPesos;
+      })
+    );
+  }
+
+  adicionarSessao(sessao: any) {
+    this.http.post(`${this.apiURL}/sessoes.json`,sessao)
+      .subscribe((responseData) => {
+        console.log(responseData);
+      });
+  }
+
 }

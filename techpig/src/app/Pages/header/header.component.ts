@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AutenticaService } from '../../autentica.service'; 
+import { AutenticaService } from '../../utils/autentica.service'; 
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 

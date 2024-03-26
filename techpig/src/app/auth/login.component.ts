@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AutenticaService } from '../autentica.service';
+import { AutenticaService } from '../utils/autentica.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';

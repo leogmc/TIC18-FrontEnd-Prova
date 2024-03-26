@@ -3,7 +3,7 @@ import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpParams } from
 
 import { Observable, from } from 'rxjs';
 import { exhaustMap, take } from 'rxjs/operators';
-import { AutenticaService } from '../autentica.service';
+import { AutenticaService } from '../utils/autentica.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 

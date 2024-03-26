@@ -1,3 +1,6 @@
+
+
+import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -20,7 +23,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { initializeApp, getApps } from "firebase/app";
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //@angular/material
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,16 +34,23 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { ListarPesosComponent } from './Pages/listar-pesos/listar-pesos.component';
+import { FiltroPipe } from './utils/filtro.pipe';
+import { CalcularIdadePipe } from './utils/calcular-idade.pipe';
+import { DatePipe } from '@angular/common';
+import { CadastrarSessaoComponent } from './Pages/cadastrar-sessao/cadastrar-sessao.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'principal', component: PrincipalComponent },
   { path: 'cadastrarAnimal', component: CadastrarComponent },
   { path: 'listarAnimal', component: ListarComponent },
-  { path: 'cadastrarPeso', component: CadastroPesoComponent },
+  { path: 'cadastrarPeso', component: ListarPesosComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'editarAnimal', component: EditarComponent }
+  { path: 'editarAnimal/:id', component: EditarComponent },
+  { path: 'cadastroSessao', component: CadastrarSessaoComponent }
   // { path: 'editarPeso/:id',  component: EditarPesoComponent},
+  //{ path: 'editarAnimal', component: EditarComponent }
 ];
 
 @NgModule({
@@ -52,9 +64,14 @@ const routes: Routes = [
     CadastroPesoComponent,
     EditarPesoComponent,
     ControlePesoComponent,
-    HeaderComponent
+    HeaderComponent,
+    ListarPesosComponent,
+    FiltroPipe,
+    CalcularIdadePipe,
+    CadastrarSessaoComponent
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
@@ -69,6 +86,8 @@ const routes: Routes = [
     HttpClientModule,
     BrowserAnimationsModule,
     MatIconModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
     AngularFireModule.initializeApp({
       apiKey: "AIzaSyB5w1o6q6kFHmEjJ1mao5AdPHHaX-dHv_Q",
       authDomain: "techpig-3d8dc.firebaseapp.com",
@@ -85,7 +104,10 @@ const routes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    { provide: DatePipe},
+    { provide: MatDialogRef, useValue: {} },
+    { provide: MAT_DIALOG_DATA, useValue: {} }
   ],
   bootstrap: [AppComponent]
 })

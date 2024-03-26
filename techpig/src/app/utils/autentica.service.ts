@@ -2,8 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, tap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth'
-import { GoogleAuthProvider } from '@angular/fire/auth'
-import { Usuario } from './Models/usuario';
+import { Usuario } from '../Models/usuario';
 interface AuthResponseData {
   idToken: string;
   email: string;

@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BancoService } from '../../banco.service';
+import { BancoService } from '../../utils/banco.service';
 import { Suino } from '../../Models/suino';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PesoSuino } from '../../Models/pesoSuino';
 
 @Component({
   selector: 'app-cadastro-peso',
@@ -11,31 +14,75 @@ import { Suino } from '../../Models/suino';
 export class CadastroPesoComponent implements OnInit {
   pesoForm!: FormGroup;
   suinos!: Suino[];
-  constructor(private fb: FormBuilder, private servico: BancoService) { }
-  ngOnInit() {
+  pesoData!: PesoSuino;
+  indicePeso!: number;
+  constructor(
+    private fb: FormBuilder,
+    private servico: BancoService,
+    private dialogRef: MatDialogRef<CadastroPesoComponent>,
+    private snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: { opcao: string, peso: PesoSuino, indice: number },) {
     this.pesoForm = this.fb.group({
-      brincoSuino: ['', Validators.required],
-      dataPesagem: ['', Validators.required],
-      pesoKg: ['', Validators.required]
+      brincoSuino: [data.peso?.brincoSuino || '', Validators.required],
+      dataPesagem: [data.peso?.dataPesagem || '', Validators.required],
+      pesoKg: [data.peso?.pesoKg || '', Validators.required]
     });
+  }
 
+  ngOnInit(): void {
     this.carregarSuinos();
+  }
 
+  openDialog(): void {
+    if (this.data.opcao === 'editar') {
+      this.pesoForm.patchValue({
+        brincoSuino: this.data.peso?.brincoSuino,
+        dataPesagem: this.data.peso?.dataPesagem,
+        pesoKg: this.data.peso?.pesoKg
+      });
+    }
   }
   carregarSuinos() {
     this.servico.getSuinos().subscribe(suinos => {
       this.suinos = suinos;
     });
   }
-  isAnimalBrincoValid() {
-    return this.pesoForm.get('brincoSuino')?.invalid && this.pesoForm.get('brincoSuino')?.touched;
+ 
+  onEdit(): void {
+    const id = this.data.peso?.id!;
+    this.servico.editarPesoSuino(this.pesoForm.value.brincoSuino, id, this.pesoForm.value).subscribe(() => {
+      this.pesoForm.reset();
+      this.mostrarMensagem('Pesagem editada com sucesso');
+      this.servico.atualizarListaPesos();
+      this.dialogRef.close();
+    });
+  }
+  onAdd(): void {
+    this.servico.adicionarPesoSuino(this.pesoForm.value.brincoSuino, this.pesoForm.value).subscribe(() => {
+      this.pesoForm.reset();
+      this.mostrarMensagem('Pesagem adicionada com sucesso');
+      this.servico.atualizarListaPesos();
+      this.dialogRef.close();
+    });
   }
 
-  submitPeso(event: Event): void {
+
+  mostrarMensagem(messagem: string): void {
+    this.snackBar.open(messagem, 'Fechar', {
+      duration: 3000, // 3 segundos
+    });
+  }
+  onCancelClick(): void {
+    this.dialogRef.close();
+  }
+
+  onSaveClick(): void {
     if (this.pesoForm.valid) {
-      this.servico.adicionarPesoSuino(this.pesoForm.value.brincoSuino, this.pesoForm.value).subscribe(() => {
-        this.pesoForm.reset();
-      });
+      if (this.data.opcao === 'editar') {
+        this.onEdit();
+      } else {
+        this.onAdd();
+      }
     }
   }
 }

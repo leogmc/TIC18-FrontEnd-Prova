@@ -1,22 +1,32 @@
-<form [formGroup]="pesoForm" (ngSubmit)="submitPeso($event)">
-   <mat-form-field appearance="fill">
-        <mat-label>Selecione o Suíno</mat-label>
-        <mat-select formControlName="brincoSuino">
-            <mat-option *ngFor="let suino of suinos" [value]="suino.brinco">{{ suino.brinco }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="pesoForm.get('dataPesagem')?.touched && !isAnimalBrincoValid()">Escolha um suíno</mat-error>
-    </mat-form-field><br>
-    <mat-form-field appearance="fill">
-        <mat-label>Data de Pesagem</mat-label>
-        <input matInput [matDatepicker]="pickerPesagem" formControlName="dataPesagem">
-        <mat-datepicker-toggle matSuffix [for]="pickerPesagem"></mat-datepicker-toggle>
-        <mat-datepicker #pickerPesagem></mat-datepicker>
-        <mat-error *ngIf="pesoForm.get('dataPesagem')?.hasError('required')  && pesoForm.get('dataPesagem')?.touched">Campo obrigatório</mat-error>
-      </mat-form-field><br>
-    <mat-form-field appearance="fill">
-        <mat-label>Peso</mat-label>
-        <input matInput type="number" formControlName="pesoKg">
-        <mat-error *ngIf="pesoForm.get('pesoKg')?.hasError('required')  && pesoForm.get('pesoKg')?.touched">Campo obrigatório</mat-error>
-    </mat-form-field><br>
-    <button mat-raised-button color="primary" type="submit">Salvar</button>
-</form>
+<h1 mat-dialog-title>{{ data.opcao === 'editar' ? 'Editar Peso' : 'Cadastrar Peso' }}</h1>
+<div class="form-container">
+    <form [formGroup]="pesoForm">
+        <div class="form-group">
+            <mat-form-field>
+                <mat-label>Selecione o Suíno</mat-label>
+                <mat-select formControlName="brincoSuino">
+                    <mat-option *ngFor="let suino of suinos" [value]="suino.brinco">{{ suino.brinco }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="pesoForm.get('brincoSuino')?.touched && !pesoForm.get('brincoSuino')?.valid">Escolha um suíno</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-group">
+            <mat-form-field>
+                <input matInput [matDatepicker]="pickerPesagem" formControlName="dataPesagem" placeholder="Data da Pesagem">
+                <mat-datepicker-toggle matSuffix [for]="pickerPesagem"></mat-datepicker-toggle>
+                <mat-datepicker #pickerPesagem></mat-datepicker>
+                <mat-error *ngIf="pesoForm.get('dataPesagem')?.hasError('required')  && pesoForm.get('dataPesagem')?.touched">Campo obrigatório</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-group">
+            <mat-form-field>
+                <input matInput formControlName="pesoKg" placeholder="Peso em Kg" type="number">
+                <mat-error *ngIf="pesoForm.get('pesoKg')?.hasError('required')  && pesoForm.get('pesoKg')?.touched">Campo obrigatório</mat-error>
+            </mat-form-field>
+            <button mat-raised-button color="basic" (click)="onCancelClick()">Cancelar</button>
+            <button mat-raised-button color="primary" (click)="onSaveClick()"
+                [disabled]="pesoForm.invalid">Salvar</button>
+        </div>
+    </form>
+
+</div>
