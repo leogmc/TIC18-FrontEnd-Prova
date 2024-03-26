@@ -13,14 +13,14 @@ import { RouterModule } from '@angular/router';
 import { MatFormField } from '@angular/material/form-field';
 import { MatLabel } from '@angular/material/form-field';
 import { MatFormFieldModule} from '@angular/material/form-field';
-
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'app-listar-suinos',
     standalone: true,
     templateUrl: './listar-suinos.component.html',
     styleUrl: './listar-suinos.component.css',
-    imports: [CommonModule, FormsModule, CalcularIdadePipe, MatTableModule, MatIcon, RouterModule, MatFormField, MatLabel, MatFormFieldModule]
+    imports: [CommonModule, FormsModule, CalcularIdadePipe, MatTableModule, MatIcon, RouterModule, MatFormField, MatLabel, MatFormFieldModule, MatButton]
 })
 export class ListarSuinosComponent implements OnInit {
 

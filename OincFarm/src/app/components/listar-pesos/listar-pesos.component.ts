@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 //@angular/material
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormField} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MatOption } from '@angular/material/core';
+import { MatOption } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButton } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { Suino } from '../../models/suino.model';
+import {FormsModule} from '@angular/forms';
 import { BancoService } from '../../utils/banco.service';
-import { ReactiveFormsModule } from '@angular/forms';
 import { PesoSuino } from '../../models/pesoSuino';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';

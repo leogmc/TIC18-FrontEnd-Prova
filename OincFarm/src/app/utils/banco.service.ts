@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, exhaustMap, map, of, take, tap } from 'rxjs';
 import { Suino } from '../models/suino.model';
 import { PesoSuino } from '../models/pesoSuino';
+import { Sessao } from '../models/sessao';
 
 @Injectable({
   providedIn: 'root'
@@ -86,20 +87,11 @@ export class BancoService {
     );
   }
 
+  //PESO DO SUINO
+
   adicionarPesoSuino(idSuino: string, pesoSuino: PesoSuino) {
     return this.http.post(`${this.apiURL}/pesos/${idSuino}.json`, pesoSuino);
   }
-
-  // getPesosSuino(idSuino: string): Observable<PesoSuino[]> {
-  //   return this.http.get<{ [key: string]: PesoSuino }>(`${this.apiURL}/pesos/${idSuino}.json`)
-  //     .pipe(
-  //       map(responseData => {
-  //         return Object.values(responseData);
-  //       }),
-  //       catchError(this.handleError<any>('getPesosSuino'))
-  //     );
-  // }
-
 
   apagarTodosPesosSuino(idSuino: string) {
     return this.http.delete(`${this.apiURL}/pesos/${idSuino}.json`);
@@ -140,7 +132,6 @@ export class BancoService {
     );
   }
 
-
   obterTodosPesos(): Observable<PesoSuino[]> {
     const url = `${this.apiURL}/pesos.json`;
     return this.http.get<{ [key: string]: { [key: string]: PesoSuino } }>(url).pipe(
@@ -159,6 +150,7 @@ export class BancoService {
       })
     );
   }
+
   //TESTING
 
   getPesosSuino(idSuino: string): Observable<any[]> {
@@ -180,4 +172,50 @@ export class BancoService {
     console.error('Erro ao obter pesos de suíno:', error);
     throw error;
   }
+
+
+  // SESSOES
+
+  adicionarSessao(sessao: any) {
+    this.http.post(`${this.apiURL}/sessoes.json`,sessao)
+      .subscribe((responseData) => {
+        console.log(responseData);
+      });
+  }
+
+  getSessoes() {
+    return this.http.get<{ [key: string]: Sessao }>(`${this.apiURL}/sessoes.json`).pipe(
+      map((responseData) => {
+        const listaArray: Sessao[] = [];
+        for (const key in responseData) {
+          if ((responseData).hasOwnProperty(key)) {
+            listaArray.push({ ...(responseData as any)[key], id: key });
+          }
+        }
+        return listaArray;
+      }
+      ),
+    );
+  }
+
+  apagarTodasSessoes() {
+    return this.http.delete(`${this.apiURL}/sessoes.json`);
+  }
+
+  apagarSessao(id: string): Observable<any> {
+    const url = `${this.apiURL}/sessoes/${id}.json`;
+    return this.http.delete(url);
+  }
+
+  getSessao(id: string): Observable<Sessao> {
+    const url = `${this.apiURL}/sessoes/${id}.json`;
+    return this.http.get<Sessao>(url)
+      .pipe(
+        tap((sessao: Sessao) => {
+          console.log('Detalhes da sessao:', sessao);
+        }),
+        catchError(this.handleError<any>('getSessao'))
+      );
+  }
+
 }

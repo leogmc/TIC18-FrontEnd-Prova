@@ -11,7 +11,7 @@ import { dateFormatValidator } from '../../customValidators/dateFormatValidator'
 import { AudioService } from '../../utils/audio.service';
 import { DataBaseService } from '../../utils/data-base.service';
 import { HttpClientModule } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 
 @Component({

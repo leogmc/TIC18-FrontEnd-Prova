@@ -1,3 +1,7 @@
+.titulo{
+  color: #652c2c;
+}
+
 .formulario {
     border: solid 4px #652c2c;
     box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.4); /* Sombra */
@@ -9,9 +13,9 @@
     width: 100%;
     margin: 0 auto; /* Define margens automáticas para alinhar o elemento ao centro horizontalmente */
     text-align:start;
-    margin-top: 70px;
-    margin-bottom: 80px;
-    text-align:start;
+    margin-top: 60px;
+    margin-bottom: 30px;
+    text-align:center;
   }
 
   .form {
@@ -31,12 +35,6 @@
     color:#8C4A4A;
 }
 
-.senha{
-  border: none;
-  border-radius: 5px;
-  background-color: #8C4A4A;
-  color: white;
-}
 
 .botao{
   background-color: white;
@@ -44,10 +42,6 @@
   border-radius: 10px;
   width: 128px;
   height: 40px;
-}
-
-#cadastrar{
-  margin-left: 15px;
 }
 
 mat-label{
